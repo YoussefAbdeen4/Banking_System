@@ -8,7 +8,7 @@
 
 2. **Builder Pattern**  
    - Implemented in the **QueryBuilder** class to construct SQL queries dynamically.  
-   - This allows flexible creation of `SELECT`, `INSERT`, `UPDATE`, and `DELETE` queries for the database.
+   - This allows flexible creation of `SELECT`, `INSERT`, `UPDATE`, `DELETE` , and `JOIN` queries for the database.
 
 3. **Prototype Pattern**  
    - Applied to the **Account** class because most accounts share some fixed data.  
