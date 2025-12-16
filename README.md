@@ -22,5 +22,7 @@
 5. **Command Pattern**  
    - Applied in the **TransactionManager** to encapsulate all operations (like create account, deposit, withdraw, delete) as commands.  
    - This allows flexible execution of actions, decouples requests from the object that performs them, and makes undo/redo possible.
+6. **State Pattern**
+   - Used to manage account states, allowing smooth transitions between Active and Inactive accounts while keeping the behavior clean and organized.
 
 
