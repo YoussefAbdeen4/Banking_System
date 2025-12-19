@@ -5,6 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
+import Controllers.TransactionManagerProxy;
 import Controllers.command.Command;
 import javax.swing.JOptionPane;
 
@@ -16,17 +17,19 @@ public class CreateAccountCommand implements Command {
 
     private String ssn, type;
     private double balance;
+    private final TransactionManagerProxy manager;
 
     public CreateAccountCommand(String ssn, double balance, String type) {
         this.ssn = ssn;
         this.balance = balance;
         this.type = type;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
         try {
-            TransactionManager.getInstance().createAccount(ssn, balance, type);
+            manager.createAccount(ssn, balance, type);
         } catch (CloneNotSupportedException ex) {
            JOptionPane.showMessageDialog(
             null,

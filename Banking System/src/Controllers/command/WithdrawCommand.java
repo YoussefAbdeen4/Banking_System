@@ -5,6 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
+import Controllers.TransactionManagerProxy;
 import Controllers.command.Command;
 
 /**
@@ -15,14 +16,16 @@ public class WithdrawCommand implements Command {
 
     private int accountId;
     private double amount;
+    private final TransactionManagerProxy manager;
 
     public WithdrawCommand(int accountId, double amount) {
         this.accountId = accountId;
         this.amount = amount;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
-        TransactionManager.getInstance().executeWithdrawal(accountId, amount);
+        manager.executeWithdrawal(accountId, amount);
     }
 }

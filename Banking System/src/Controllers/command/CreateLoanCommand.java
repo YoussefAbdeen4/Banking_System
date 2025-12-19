@@ -5,6 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
+import Controllers.TransactionManagerProxy;
 import Controllers.command.Command;
 
 /**
@@ -16,16 +17,18 @@ public class CreateLoanCommand implements Command {
     private int accountId, years;
     private double amount;
     private String type;
+    private final TransactionManagerProxy manager;
 
     public CreateLoanCommand(int accountId, double amount, int years, String type) {
         this.accountId = accountId;
         this.amount = amount;
         this.years = years;
         this.type = type;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
-        TransactionManager.getInstance().createLoan(accountId, amount, years, type);
+        manager.createLoan(accountId, amount, years, type);
     }
 }

@@ -92,9 +92,25 @@ public class Account implements Cloneable{
                 .execute();
     }
 
+    public void deposit(Account account, double amount) {
+        account.setBalance(account.getBalance() + amount);
+        System.out.println("Deposit successful");
+        
+    }
+
+    public void withdraw(Account account, double amount) {
+        if (amount > account.getBalance()) {
+            System.out.println("Insufficient balance");
+            return;
+        }
+        account.setBalance(account.getBalance() - amount);
+        System.out.println("Withdraw successful");
+    }
     @Override
     public String toString() {
         return "Account{" + "Id=" + Id + ", customerId=" + customerId + ", balance=" + balance + ", status=" + status + ", type=" + type + '}';
     }
+
+   
     
 }

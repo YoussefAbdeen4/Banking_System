@@ -5,7 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
-import Controllers.command.Command;
+import Controllers.TransactionManagerProxy;
 
 /**
  *
@@ -14,14 +14,16 @@ import Controllers.command.Command;
 public class ChangeAccountStatusCommand implements Command {
 
     private int accountId;
+    private final TransactionManagerProxy manager;
 
     public ChangeAccountStatusCommand(int accountId) {
         this.accountId = accountId;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
-        TransactionManager manager = TransactionManager.getInstance();
+        
         manager.changeAccountStatus(accountId);
     }
 }

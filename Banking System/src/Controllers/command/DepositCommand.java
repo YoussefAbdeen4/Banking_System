@@ -5,6 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
+import Controllers.TransactionManagerProxy;
 import Controllers.command.Command;
 
 /**
@@ -15,15 +16,17 @@ public class DepositCommand implements Command {
 
     private int accountId;
     private double amount;
+    private final TransactionManagerProxy manager;
 
     public DepositCommand(int accountId, double amount) {
         this.accountId = accountId;
         this.amount = amount;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
-        TransactionManager.getInstance().executeDeposit(accountId, amount);
+        manager.executeDeposit(accountId, amount);
     }
 }
 

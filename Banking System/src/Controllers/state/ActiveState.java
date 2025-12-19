@@ -5,9 +5,12 @@
 package Controllers.state;
 
 
+import Controllers.TransactionManager;
 import Controllers.state.AccountState;
+import Database.QueryBuilder;
 import Models.Account;
 import Models.Loan;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -17,18 +20,27 @@ public class ActiveState implements AccountState {
 
     @Override
     public void deposit(Account account, double amount) {
-        account.setBalance(account.getBalance() + amount);
-        System.out.println("Deposit successful");
+        account.deposit(account,amount);
+        new QueryBuilder()
+                .table("accounts")
+                .update("balance = " + account.getBalance())
+                .where("id = " +account.getId() )
+                .execute();
+        TransactionManager.getInstance().createTransaction(account.getId(),"Deposit",amount);
+        JOptionPane.showMessageDialog(null,"Operation done Successfuly","Success", JOptionPane.INFORMATION_MESSAGE);
+        
     }
 
     @Override
     public void withdraw(Account account, double amount) {
-        if (amount > account.getBalance()) {
-            System.out.println("Insufficient balance");
-            return;
-        }
-        account.setBalance(account.getBalance() - amount);
-        System.out.println("Withdraw successful");
+        account.withdraw(account, amount);
+        new QueryBuilder()
+                .table("accounts")
+                .update("balance = " + account.getBalance())
+                .where("id = " +account.getId() )
+                .execute();
+        TransactionManager.getInstance().createTransaction(account.getId(),"Deposit",amount);
+        JOptionPane.showMessageDialog(null,"Operation done Successfuly","Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
     @Override

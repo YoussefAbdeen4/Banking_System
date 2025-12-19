@@ -259,7 +259,6 @@ public class customerGui extends javax.swing.JFrame {
         }
         CreateCustomerCommand command = new CreateCustomerCommand(name,ssn,email,phone,age,address,gender);
         command.execute();
-        JOptionPane.showMessageDialog(null,"Customer created successfully!","Success", JOptionPane.INFORMATION_MESSAGE);
         clearForm();
     }//GEN-LAST:event_jButton5ActionPerformed
 private void clearForm() {

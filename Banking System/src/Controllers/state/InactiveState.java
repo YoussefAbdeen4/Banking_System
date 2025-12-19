@@ -25,6 +25,7 @@ public class InactiveState implements AccountState {
     @Override
     public void withdraw(Account account, double amount) {
         JOptionPane.showMessageDialog(null, "Account is closed", "Error", JOptionPane.ERROR_MESSAGE);
+
     }
 
     @Override

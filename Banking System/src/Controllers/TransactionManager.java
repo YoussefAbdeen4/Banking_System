@@ -4,10 +4,8 @@
  */
 package Controllers;
 
-import Controllers.AccountFactory;
 import Controllers.state.ActiveState;
 import Controllers.state.InactiveState;
-import Controllers.LoanFactory;
 import Database.QueryBuilder;
 import Models.Account;
 import Models.Customer;
@@ -22,7 +20,7 @@ import javax.swing.JOptionPane;
  *
  * @author DELL
  */
-public class TransactionManager {
+public class TransactionManager implements ITransactionManager{
 
     private static TransactionManager instance;
 
@@ -40,11 +38,13 @@ public class TransactionManager {
         return instance;
     }
 
+    @Override
     public void createCustomer(String name, String ssn, String email, String phone, int age, String address, String gender) {
         Customer customer = new Customer(name, ssn, email, phone, age, address, gender);
         customer.create();
     }
 
+    @Override
     public void createAccount(String ssn, double balance, String type) throws CloneNotSupportedException {
 
         List<Map<String, Object>> result = new QueryBuilder()
@@ -66,6 +66,7 @@ public class TransactionManager {
 
     }
 
+    @Override
     public void changeAccountStatus(int id) {
         Account account = getAccount(id);
         switch (account.getStatus().toUpperCase()) {
@@ -88,6 +89,7 @@ public class TransactionManager {
                 .execute();
     }
 
+    @Override
     public void executeWithdrawal(int id, double amount) {
         Account account = getAccount(id);
         if (account == null) {
@@ -95,32 +97,20 @@ public class TransactionManager {
             return;
         }
         account.status().withdraw(account, amount);
-        new QueryBuilder()
-                .table("accounts")
-                .update("balance = " + account.getBalance())
-                .where("id = " + id)
-                .execute();
-        createTransaction(id,"Withdraw",amount);
-        JOptionPane.showMessageDialog(null,"Operation done Successfuly","Success", JOptionPane.INFORMATION_MESSAGE);
     }
 
+    @Override
     public void executeDeposit(int id, double amount) {
         Account account = getAccount(id);
         if (account == null) {
             JOptionPane.showMessageDialog(null, "Wrong Account number", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-        account.status().deposit(account, amount);
-        new QueryBuilder()
-                .table("accounts")
-                .update("balance = " + account.getBalance())
-                .where("id = " + id)
-                .execute();
-        createTransaction(id,"Deposit",amount);
-        JOptionPane.showMessageDialog(null,"Operation done Successfuly","Success", JOptionPane.INFORMATION_MESSAGE);
+         account.status().deposit(account, amount);
     }
 
     // --- Loan Operations ---
+    @Override
     public void createLoan(int accountId, double amount, int years, String type) {
         Account account = getAccount(accountId);
         if(account == null){
@@ -136,13 +126,13 @@ public class TransactionManager {
                 .where("id = " + accountId)
                 .execute();
             createTransaction(accountId,"Loan",amount);
-            JOptionPane.showMessageDialog(null,"Operation done Successfuly","Success", JOptionPane.INFORMATION_MESSAGE);
+
         }else{
             JOptionPane.showMessageDialog(null, "The account type invalid", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
     
-    private void createTransaction(int accountId, String type, double amount) {
+    public void createTransaction(int accountId, String type, double amount) {
 
     Transaction transaction = new Transaction( accountId, type, amount);
     transaction.create();
@@ -163,6 +153,7 @@ public class TransactionManager {
         Map<String, Object> row = result.get(0);
 
         Account account = new Account();
+        account.setId(id);
         account.setCustomerId((int) row.get("customer_id"));
         account.setBalance(((Number) row.get("balance")).doubleValue());
         account.setType((String) row.get("Type"));
@@ -238,7 +229,7 @@ public class TransactionManager {
 
     return loans;
 }
-public List<Transaction> viewTransactions() {
+    public List<Transaction> viewTransactions() {
 
     List<Transaction> transactions = new ArrayList<>();
 
@@ -263,7 +254,8 @@ public List<Transaction> viewTransactions() {
 
     return transactions;
 }
-public void deleteCustomer(int customerId) {
+    @Override
+    public void deleteCustomer(int customerId) {
         new QueryBuilder()
                 .table("customers")
                 .delete()
@@ -271,6 +263,7 @@ public void deleteCustomer(int customerId) {
                 .execute();
     }
 
+    @Override
     public void deleteAccount(int accountId) {
         new QueryBuilder()
                 .table("accounts")

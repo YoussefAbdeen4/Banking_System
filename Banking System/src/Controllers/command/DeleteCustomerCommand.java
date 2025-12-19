@@ -5,6 +5,7 @@
 package Controllers.command;
 
 import Controllers.TransactionManager;
+import Controllers.TransactionManagerProxy;
 
 /**
  *
@@ -13,13 +14,15 @@ import Controllers.TransactionManager;
 public class DeleteCustomerCommand implements Command {
 
     private int customerId;
+    private final TransactionManagerProxy manager;
 
     public DeleteCustomerCommand(int customerId) {
         this.customerId = customerId;
+        this.manager = new TransactionManagerProxy();
     }
 
     @Override
     public void execute() {
-        TransactionManager.getInstance().deleteCustomer(customerId);
+        manager.deleteCustomer(customerId);
     }
 }

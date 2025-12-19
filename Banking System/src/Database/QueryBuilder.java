@@ -21,7 +21,11 @@ public class QueryBuilder {
     private String insertData;
     private String joinTable;
     private String joinCondition;
-
+    private static DatabaseAdapter adapter = new SqlServerAdapter();
+    
+    public static void setAdapter(DatabaseAdapter newAdapter) {
+        adapter = newAdapter;
+    }
     public QueryBuilder table(String table) {
         this.table = table;
         return this;
@@ -66,13 +70,13 @@ public class QueryBuilder {
     // SELECT
     public List<Map<String, Object>> get() {
         String sql = buildSql();
-        return DatabaseConnection.getInstance().executeSelect(sql);
+        return adapter.executeSelect(sql);
     }
 
     // INSERT/UPDATE/DELETE
     public int execute() {
         String sql = buildSql();
-        return DatabaseConnection.getInstance().executeUpdate(sql);
+        return adapter.executeUpdate(sql);
     }
     
     private String buildSql() {
